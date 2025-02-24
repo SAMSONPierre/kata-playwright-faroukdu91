@@ -13,28 +13,9 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ButtonReturnTest {
+public class ButtonReturnTest extends BaseTest {
     @Test
     void test_button_retour() {
-        // Use playwright driver to get a browser and open a new page
-        var playwright = Playwright.create();
-        var launchOptions = new BrowserType.LaunchOptions().setHeadless(false)
-                .setSlowMo(1000); // Remove this when you're done debugging
-        var browser = playwright.chromium().launch(launchOptions);
-
-        // Set base URL for the new context
-        var contextOptions = new Browser.NewContextOptions();
-        contextOptions.setBaseURL("https://f.lsi2.hr.dmerej.info");
-        var context = browser.newContext(contextOptions);
-
-        var page = context.newPage();
-        page.onResponse(response -> {
-            if (response.status() == 500) {
-                fail("❌ Error 500 detected: " + response.url());
-            }
-        });
-
-        ResetDB.reset_db(page);
         page.navigate("/add_employee");
         assertNotEquals(0, page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Retour")).count());
         page.navigate("/employees");
