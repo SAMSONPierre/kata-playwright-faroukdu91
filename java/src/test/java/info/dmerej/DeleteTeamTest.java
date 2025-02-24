@@ -6,6 +6,8 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.SelectOption;
+import info.dmerej.page.AddEmployeePage;
+import info.dmerej.page.AddTeamPage;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -24,26 +26,29 @@ public class DeleteTeamTest extends BaseTest{
                 "2025-08-26",
                 "Dev"
         );
+        AddEmployeePage addEmployeePage = new AddEmployeePage(page);
 
-        page.navigate("/add_employee");
+        addEmployeePage.navigate();
 
-        page.getByPlaceholder("Zip code").fill(user1.getZipCode());
-        page.getByPlaceholder("Name").fill(user1.getName());
-        page.getByPlaceholder("Email").fill(user1.getEmail());
-        page.locator("#id_address_line1").fill(user1.getAddress());
-        page.getByPlaceholder("City").fill(user1.getCity());
-        page.getByPlaceholder("Hiring date").fill(user1.getHiringDate());
-        page.getByPlaceholder("Job title").fill(user1.getJobTitle());
+        addEmployeePage.fillZipCode(user1.getZipCode());
+        addEmployeePage.fillName(user1.getName());
+        addEmployeePage.fillEmail(user1.getEmail());
+        addEmployeePage.fillAddressLine1(user1.getAddress());
+        addEmployeePage.fillCity(user1.getCity());
+        addEmployeePage.fillHiringDate(user1.getHiringDate());
+        addEmployeePage.fillJobTitle(user1.getJobTitle());
+        addEmployeePage.clickAddButton();
 
-        var addButton = page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add"));
-        addButton.click();
+        AddTeamPage addTeamCreatePage = new AddTeamPage(page);
 
         page.navigate("/add_team");
-        var nameInput = page.locator("input[name=\"name\"]");
-        var teamName = "Team Farouk";
-        nameInput.fill(teamName);
-        page.click("text='Add'");
 
+        String teamName = "Team Farouk";
+        addTeamCreatePage.fillTeamName(teamName);
+        addTeamCreatePage.clickAddButton();
+
+
+        //TODO Page object model for these pages
         page.navigate("/employees");
         var editUser = page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Edit"));
         editUser.click();

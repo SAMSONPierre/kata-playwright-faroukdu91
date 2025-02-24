@@ -1,6 +1,8 @@
 package info.dmerej;
 
 import com.microsoft.playwright.*;
+import info.dmerej.page.AddTeamPage;
+import info.dmerej.page.ResetDbPage;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,9 +37,10 @@ public class BaseTest {
     }
 
     void resetDB() {
-        page.navigate("/reset_db");
-        page.locator("button:has-text('proceed')").click();
-        page.navigate("/");
+        ResetDbPage resetDbPage = new ResetDbPage(page);
+        resetDbPage.navigate();
+        resetDbPage.clickProceedButton();
+        resetDbPage.navigateToHomePage();
     }
 
     @AfterAll

@@ -1,7 +1,6 @@
 package info.dmerej;
 
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.AriaRole;
+import info.dmerej.page.AddEmployeePage;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,20 +9,20 @@ public class AddUserTest extends BaseTest {
 
     @Test
     void test_add_user() {
-        page.navigate("/add_employee");
+        AddEmployeePage addEmployeePage = new AddEmployeePage(page);
 
-        page.getByPlaceholder("Zip code").fill("888888888888888888888888888888888888888888888");
-        page.getByPlaceholder("Name").fill("Farouk");
-        page.getByPlaceholder("Email").fill("faroukdu91@gmail.com");
-        page.locator("#id_address_line1").fill("10 avenue de Paris");
-        page.getByPlaceholder("City").fill("Villejuif");
-        page.getByPlaceholder("Hiring date").fill("2025-08-26");
-        page.getByPlaceholder("Job title").fill("Dev");
+        addEmployeePage.navigate();
 
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add")).click();
+        addEmployeePage.fillZipCode("888888888888888888888888888888888888888888888");
+        addEmployeePage.fillName("Farouk");
+        addEmployeePage.fillEmail("faroukdu91@gmail.com");
+        addEmployeePage.fillAddressLine1("10 avenue de Paris");
+        addEmployeePage.fillCity("Villejuif");
+        addEmployeePage.fillHiringDate("2025-08-26");
+        addEmployeePage.fillJobTitle("Dev");
 
-        String selector = String.format("td:has-text('%s')", "Farouk");
-        var isVisible = page.isVisible(selector);
-        assertTrue(isVisible);
+        addEmployeePage.clickAddButton();
+
+        assertTrue(addEmployeePage.isEmployeeVisible("Farouk"));
     }
 }
